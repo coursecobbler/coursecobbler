@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react";
+import {formatTime} from "../lib/formatTime";
 
 type PlayerProps = {
     mediaUrl:string
@@ -26,12 +27,8 @@ export function Player({mediaUrl}:PlayerProps){
 
     }, []);
 
-   /* function showTime(){
-        console.log(videoRef.current?.currentTime);
-    };
-    */
     return  <div>
                 <video ref={videoRef} src={mediaUrl} controls width={640} />
-                <p>Time: {time}s</p>
+                <p>Time: {formatTime(time)}s</p>
             </div>
 }
