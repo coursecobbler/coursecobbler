@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
+import {useCurrentTime} from  "../hooks/useCurrentTime"
 import {formatTime} from "../lib/formatTime";
 
 type PlayerProps = {
@@ -8,27 +9,12 @@ type PlayerProps = {
 };
 
 export function Player({mediaUrl}:PlayerProps){
-    const [time, setTime] = useState(0);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const time = useCurrentTime(videoRef);
 
-    useEffect(()=>{
-        const video = videoRef.current;
-        if (!video) return;
-
-        const onTimeUpdate= ()=> {
-            setTime(video.currentTime);
-        }
-
-        video.addEventListener("timeupdate", onTimeUpdate);
-
-        return ()=> {
-            removeEventListener("timeupdate", onTimeUpdate);
-        };
-
-    }, []);
-
-    return  <div>
+    return ( <div>
                 <video ref={videoRef} src={mediaUrl} controls width={640} />
-                <p>Time: {formatTime(time)}s</p>
+                <p>Time: {formatTime(time)}</p>
             </div>
+    );
 }
