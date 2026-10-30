@@ -1,0 +1,9 @@
+{
+  "id": "ep-01",
+  "title": "Sample episode",
+  "mediaFile": "sample.mp4",
+  "requiredRegions": [
+    { "id": "r1", "start": 3, "end": 7, "label": "Intro point" },
+    { "id": "r2", "start": 12, "end": 17, "label": "Key takeaway" }
+  ]
+}
