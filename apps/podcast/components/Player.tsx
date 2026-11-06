@@ -18,8 +18,22 @@ export function Player({mediaUrl, episode}:PlayerProps){
     const duration = useDuration(videoRef);
 
     return ( 
-        <div>
+        <div className={styles.videoBlock}>
             <video ref={videoRef} src={mediaUrl} controls width={640} />
+            <div className={styles.mediaTrackContainer}>
+                <div className={styles.mediaTrack}>
+                    {duration > 0 && episode.requiredRegions.map((region) => {
+
+                
+                const regionStart = region.start/duration * 100;
+                const regionWidth = (region.end - region.start) / duration * 100;
+
+                return (
+                    <div key={region.id} className={styles.manditoryRegion} style={{left:`${regionStart}%`, width:`${regionWidth}%`}}></div>
+                );
+            })}
+                </div>
+            </div>
             <p>Time: {formatTime(time)}</p>
             <p>Total Duration: {formatTime(duration)}</p>
             <ul>
