@@ -7,7 +7,7 @@
     width:100%;
 }
 .region { opacity: 0.6; }
-.active { opacity: 1; font-weight: bold; }
+.regionActive { opacity: 1; font-weight: bold; }
 
 .mediaTrackContainer{
     width: calc(100% - 32px);
@@ -21,8 +21,17 @@
     display: block;
     position: relative;
 }
-.manditoryRegion{
-     background: rgba(212, 13, 13, 1);
-     height:8px;
-     position:absolute;
+.mediaTrackAttribute{
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+}
+
+.mediaTrackProgress{
+    background: rgba(215, 215, 215, 0.5);
+    z-index:1;
+}
+.mandatoryRegion{
+    background: rgba(212, 13, 13, 1);
 }

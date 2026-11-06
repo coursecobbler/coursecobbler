@@ -16,6 +16,7 @@ export function Player({mediaUrl, episode}:PlayerProps){
     const videoRef = useRef<HTMLVideoElement>(null);
     const time = useCurrentTime(videoRef);
     const duration = useDuration(videoRef);
+    const progressPercent = time / duration * 100;
 
     return ( 
         <div className={styles.videoBlock}>
@@ -27,11 +28,15 @@ export function Player({mediaUrl, episode}:PlayerProps){
                 
                 const regionStart = region.start/duration * 100;
                 const regionWidth = (region.end - region.start) / duration * 100;
+                
 
                 return (
-                    <div key={region.id} className={styles.manditoryRegion} style={{left:`${regionStart}%`, width:`${regionWidth}%`}}></div>
+                    <div key={region.id} className={`${styles.mandatoryRegion} ${styles.mediaTrackAttribute}`} style={{left:`${regionStart}%`, width:`${regionWidth}%`}}></div>
                 );
             })}
+                   {duration > 0 && (
+                     <div className={`${styles.mediaTrackProgress} ${styles.mediaTrackAttribute}`} style={{width:`${progressPercent}%`}}></div>
+                   )}
                 </div>
             </div>
             <p>Time: {formatTime(time)}</p>
