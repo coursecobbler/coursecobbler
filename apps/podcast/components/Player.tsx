@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import {useCurrentTime} from  "../hooks/useCurrentTime"
+import {useDuration} from  "../hooks/useDuration"
 import {formatTime} from "../lib/formatTime";
 import type {Episode} from "../lib/episode"
 import styles from "./Player.module.css"
@@ -14,11 +15,13 @@ type PlayerProps = {
 export function Player({mediaUrl, episode}:PlayerProps){
     const videoRef = useRef<HTMLVideoElement>(null);
     const time = useCurrentTime(videoRef);
+    const duration = useDuration(videoRef);
 
     return ( 
         <div>
             <video ref={videoRef} src={mediaUrl} controls width={640} />
             <p>Time: {formatTime(time)}</p>
+            <p>Total Duration: {formatTime(duration)}</p>
             <ul>
             {episode.requiredRegions.map((region) => {
 
