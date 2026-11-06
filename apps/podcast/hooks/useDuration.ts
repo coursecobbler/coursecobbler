@@ -6,6 +6,10 @@ export function useDuration(mediaRef: RefObject<HTMLMediaElement | null>):number
 
         const media = mediaRef.current;
         if (!media) return;
+        
+        if (Number.isFinite(media.duration)) {
+            setDuration(media.duration);
+        }
 
         const onLoadedMetadata= ()=> {
             setDuration(media.duration);
