@@ -4,6 +4,7 @@ import { useRef } from "react";
 import {useCurrentTime} from  "../hooks/useCurrentTime"
 import {useDuration} from  "../hooks/useDuration"
 import {formatTime} from "../lib/formatTime";
+import {toPercent} from "../lib/toPercent";
 import type {Episode} from "../lib/episode"
 import styles from "./Player.module.css"
 
@@ -16,7 +17,7 @@ export function Player({mediaUrl, episode}:PlayerProps){
     const videoRef = useRef<HTMLVideoElement>(null);
     const time = useCurrentTime(videoRef);
     const duration = useDuration(videoRef);
-    const progressPercent = time / duration * 100;
+    const progressPercent = toPercent(time, duration);
 
     return ( 
         <div className={styles.videoBlock}>
@@ -26,8 +27,8 @@ export function Player({mediaUrl, episode}:PlayerProps){
                     {duration > 0 && episode.requiredRegions.map((region) => {
 
                 
-                const regionStart = region.start/duration * 100;
-                const regionWidth = (region.end - region.start) / duration * 100;
+                const regionStart = toPercent(region.start,duration);
+                const regionWidth = toPercent( (region.end - region.start),duration);
                 
 
                 return (
