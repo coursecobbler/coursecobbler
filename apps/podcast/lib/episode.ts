@@ -6,6 +6,7 @@ export type RequiredRegion = {
 };
 
 export type Episode = {
+  version: number; 
   id: string;
   title: string;
   mediaFile: string;                   // just the file name, e.g. "sample.mp4"

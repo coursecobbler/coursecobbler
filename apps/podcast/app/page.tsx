@@ -1,7 +1,7 @@
 import {BASE_PATH} from "../lib/basePath";
 import {Player} from "../components/Player";
 import type {Episode} from "../lib/episode.ts";
-import episodeData from "../data/episode.json";
+import episodeData from "../data/cobbler.json";
 
 const episode:Episode = episodeData;
 
