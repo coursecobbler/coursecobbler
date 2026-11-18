@@ -2,7 +2,8 @@
   "name": "podcast",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3002"
+    "dev": "next dev --port 3002",
+    "thumbs": "node scripts/thumbs.mjs"
   },
   "dependencies": {
     "next": "^16.4.2",
