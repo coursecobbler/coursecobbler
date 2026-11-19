@@ -27,9 +27,27 @@ export function Player({mediaUrl, episode}:PlayerProps){
                     // 2. check res.ok (fetch doesn't throw on 404/500)
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);  
                     // 3. get the response as a Blob
-                    const videoBlob = await res.blob();                 // 3. read the body; the format decides the method
+                    const videoBlob = await res.blob();                 
+                    // 4. log the blob's size and type
+                    console.log("Blob size:",videoBlob.size, "| Blob type:",videoBlob.type, "media url:",mediaUrl);
+                    // 5. create a FormData and append the blob under the field name "file"
+                    const formData = new FormData();
+                    const mediaName = episode.mediaFile;
+                    formData.append("file", videoBlob, mediaName );
+
+                    // 6. POST it to /podcast/api/transcribe  (fetch with method + body)
+                 
+                        const uploadRes = await fetch("/podcast/api/transcribe", {
+                            method: "POST",
+                            body: formData,
+                        });
+                        if (!uploadRes.ok) throw new Error(`HTTP ${uploadRes.status}`);
+                        const groqResponse = await uploadRes.json();
+                        // 7. read the route's JSON response and log it
+                        console.log("route said:",groqResponse);
                     
-                    console.log("Blob size:",videoBlob.size, "| Blob type:",videoBlob.type);                             // 4. use it
+                    
+                
                 } catch (err) {
                     console.error("load failed:", err);            // network errors + your thrown error land here
                 }
