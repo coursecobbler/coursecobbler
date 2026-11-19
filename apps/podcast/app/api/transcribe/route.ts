@@ -1,3 +1,5 @@
+import {refineSegments} from "../../../lib/refineSegments"
+
 export async function POST(request: Request) {
 
     const hasKey = Boolean(process.env.GROQ_API_KEY);
@@ -19,6 +21,8 @@ export async function POST(request: Request) {
     groqForm.append("file", mediaFile);
     groqForm.append("model", "whisper-large-v3-turbo");
     groqForm.append("response_format", "verbose_json");
+    groqForm.append("timestamp_granularities[]","word");
+    groqForm.append("timestamp_granularities[]","segment");
 
     if(!hasKey){
         return Response.json({ error: "Missing API Key" }, { status: 500 });
@@ -38,10 +42,10 @@ export async function POST(request: Request) {
     }
     // 4. check ok, read Groq's JSON
     const groqResponse = await groqRes.json();
-
+    const refined = refineSegments(groqResponse.segments, groqResponse.words);
     // 5. return it to the browser
 
     
-    return Response.json(groqResponse);
+    return Response.json(refined);
 
 }
