@@ -19,6 +19,22 @@ export function Player({mediaUrl, episode}:PlayerProps){
     const duration = useDuration(videoRef);
     const progressPercent = toPercent(time, duration);
 
+    const handleGenerate = async () => {
+            //    (wrapped in try/catch → console.error)
+             try {
+                    // 1. fetch the video from mediaUrl
+                    const res = await fetch(mediaUrl); 
+                    // 2. check res.ok (fetch doesn't throw on 404/500)
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);  
+                    // 3. get the response as a Blob
+                    const videoBlob = await res.blob();                 // 3. read the body; the format decides the method
+                    
+                    console.log("Blob size:",videoBlob.size, "| Blob type:",videoBlob.type);                             // 4. use it
+                } catch (err) {
+                    console.error("load failed:", err);            // network errors + your thrown error land here
+                }
+    }
+
     return ( 
         <div className={styles.videoBlock}>
             <video ref={videoRef} src={mediaUrl} controls width={640} />
@@ -54,6 +70,7 @@ export function Player({mediaUrl, episode}:PlayerProps){
                 );
             })}
             </ul>
+            <button onClick={handleGenerate}>Generate transcript</button>
             
             
         </div>
