@@ -27,12 +27,16 @@ export function refineSegments(segments:Segment[], words:Word[]):Segment[]{
             segmentStart = segment.start;
             segmentEnd = segment.end;  
         }
+
         refined.push({text:segment.text.trim(),start:segmentStart,end:segmentEnd});
         wordIndex += count;
     }
 
-    // 5. return the refined segments
-        // (later: second pass to trim overlaps)
-    return refined;
+    // 5. Trim refined segment to align the starts and finishes that are overlapped
+     for (let i = 0; i < refined.length - 1; i++){
+        if(refined[i].end > refined[i+1].start) refined[i].end = refined[i+1].start;
+     }
 
+    // 6. return the refined segments
+    return refined;
 }
