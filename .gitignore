@@ -4,4 +4,5 @@ node_modules
 next-env.d.ts
 .vscode
 .DS_Store
+*.check.ts
 apps/podcast/public/thumbs/
