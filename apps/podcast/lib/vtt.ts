@@ -1,3 +1,6 @@
+
+import type {Segment} from "./transcript";
+
 export function vttFormatTime(seconds:number):string{
     
     if (!Number.isFinite(seconds) || seconds < 0) return "00:00:00.000";
@@ -17,4 +20,15 @@ export function vttFormatTime(seconds:number):string{
     const formattedMills = String(mills).padStart(3, "0");
 
     return `${formattedHours}:${formattedMinutes}:${formattedSecs}.${formattedMills}`;
+}
+
+export function vttText(segments:Segment[]):string{
+    const vttArray = ["WEBVTT",""];
+    for(const [i, segment] of segments.entries()){
+        const vttCue = String(i+1);
+        const vttTime = `${vttFormatTime(segment.start)} --> ${vttFormatTime(segment.end)}`;
+        const vttLine = segment.text;
+         vttArray.push(vttCue,vttTime,vttLine,""); 
+    }
+    return vttArray.join("\n");
 }

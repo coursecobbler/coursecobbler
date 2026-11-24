@@ -1,11 +1,14 @@
 "use client"
 
-import { useRef } from "react";
+import {useRef, useState} from "react";
 import {useCurrentTime} from  "../hooks/useCurrentTime"
 import {useDuration} from  "../hooks/useDuration"
 import {formatTime} from "../lib/formatTime";
 import {toPercent} from "../lib/toPercent";
+import {vttText} from "../lib/vtt";
+
 import type {Episode} from "../lib/episode"
+
 import styles from "./Player.module.css"
 
 type PlayerProps = {
@@ -18,6 +21,7 @@ export function Player({mediaUrl, episode}:PlayerProps){
     const time = useCurrentTime(videoRef);
     const duration = useDuration(videoRef);
     const progressPercent = toPercent(time, duration);
+    const [captionURL, setCaptionURL] = useState<string|null>(null);
 
     const handleGenerate = async () => {
             //    (wrapped in try/catch → console.error)
@@ -42,9 +46,18 @@ export function Player({mediaUrl, episode}:PlayerProps){
                         });
 
                         if (!uploadRes.ok) throw new Error(`HTTP ${uploadRes.status}`);
-                        const groqResponse = await uploadRes.json();
+                        const segments = await uploadRes.json();
                             // 7. read the route's JSON response and log it
-                        console.log("route said:",groqResponse);
+                        console.log("route said:",segments);
+                        // 8. build VTT text
+                        const vtt = vttText(segments);
+                        // 9. wrap in a Blob, make a URL
+                        const vttBlob = new Blob([vtt],{type:"text/vtt"});
+                        const vttURL = URL.createObjectURL(vttBlob);
+
+                        // 10. store it in state
+                        setCaptionURL(vttURL);
+                        
                     
                     
                 
@@ -55,7 +68,9 @@ export function Player({mediaUrl, episode}:PlayerProps){
 
     return ( 
         <div className={styles.videoBlock}>
-            <video ref={videoRef} src={mediaUrl} controls width={640} />
+            <video ref={videoRef} src={mediaUrl} controls width={640} >
+            {captionURL && <track kind="captions" src={captionURL} srcLang="en" label="English" default/>}
+            </video>
             <div className={styles.mediaTrackContainer}>
                 <div className={styles.mediaTrack}>
                     {duration > 0 && episode.requiredRegions.map((region) => {
@@ -74,6 +89,7 @@ export function Player({mediaUrl, episode}:PlayerProps){
                    )}
                 </div>
             </div>
+              {captionURL && <a href={captionURL} download="transcript.vtt">Download Transcript</a>}
             <p>Time: {formatTime(time)}</p>
             <p>Total Duration: {formatTime(duration)}</p>
             <ul>
