@@ -5,6 +5,11 @@ export async function POST(request: Request) {
     const hasKey = Boolean(process.env.GROQ_API_KEY);
 
 
+    
+
+    if(!hasKey){
+        return Response.json({ error: "Missing API Key" }, { status: 500 });
+    }
     // 1. read the incoming form data, get "file"
     const incomingData = await request.formData();
     const mediaFile = incomingData.get("file");
@@ -12,6 +17,8 @@ export async function POST(request: Request) {
     if(!(mediaFile instanceof File )){
         return Response.json({ error: "No file found" }, { status: 400 });
     }
+
+
 
     // 2. build a NEW FormData for Groq with:
     //      file   → the file you just received
@@ -24,9 +31,7 @@ export async function POST(request: Request) {
     groqForm.append("timestamp_granularities[]","word");
     groqForm.append("timestamp_granularities[]","segment");
 
-    if(!hasKey){
-        return Response.json({ error: "Missing API Key" }, { status: 500 });
-    }
+    
 
     // 3. fetch Groq's endpoint, POST, with the header:
     //      Authorization → `Bearer ${process.env.GROQ_API_KEY}`
@@ -38,7 +43,17 @@ export async function POST(request: Request) {
 
 
     if(!groqRes.ok){
-        return Response.json({error:"Groq error:"}, { status: groqRes.status });
+        const errorText = await groqRes.text();
+        console.error("Groq error:",groqRes.status, errorText);
+        return Response.json(
+            {
+                error:"Groq error:", 
+                detail: errorText, 
+            }, 
+            { 
+                status: groqRes.status
+            }
+        );
     }
     // 4. check ok, read Groq's JSON
     const groqResponse = await groqRes.json();
