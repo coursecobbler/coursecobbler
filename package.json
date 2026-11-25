@@ -1,6 +1,7 @@
 {
   "name": "coursecobbler",
   "private": true,
+  "license":"UNLICENSED",
   "packageManager": "pnpm@12.15.0",
   "scripts": {
     "dev": "pnpm -r --parallel dev"
