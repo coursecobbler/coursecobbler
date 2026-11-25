@@ -12,15 +12,15 @@ export class EpisodesService {
     return `This action returns all episodes`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} episode`;
   }
 
-  update(id: number, updateEpisodeDto: UpdateEpisodeDto) {
+  update(id: string, updateEpisodeDto: UpdateEpisodeDto) {
     return `This action updates a #${id} episode`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} episode`;
   }
 }
