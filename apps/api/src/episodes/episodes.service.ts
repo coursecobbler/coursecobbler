@@ -31,16 +31,10 @@ export class EpisodesService {
   this.episodes.push(episode);
   // 3. return it
   return episode;
-
-  
-
-
-  console.log("create got:", createEpisodeDto.title);
 }
 
   findAll() {
     return this.episodes;
-    //return `This action returns all episodes`;
   }
 
   findOne(id: string) {
@@ -50,8 +44,6 @@ export class EpisodesService {
       throw new NotFoundException('No such episode exists');
     }
     return episode;
-    
-    //return `This action returns a #${id} episode`;
   }
 
   update(id: string, updateEpisodeDto: UpdateEpisodeDto) {
@@ -59,6 +51,10 @@ export class EpisodesService {
   }
 
   remove(id: string) {
-    return `This action removes a #${id} episode`;
+    const episodeIndex = this.episodes.findIndex(episode => episode.id === id);
+    if(episodeIndex === -1){
+      throw new NotFoundException('No such episode exists, cannot be deleted');
+    }
+    this.episodes.splice(episodeIndex, 1);
   }
 }
