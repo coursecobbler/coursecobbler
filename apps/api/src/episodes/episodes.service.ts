@@ -19,8 +19,24 @@ export class EpisodesService {
 
   ];
   create(createEpisodeDto: CreateEpisodeDto) {
-    return 'This action adds a new episode';
+  // 1. build a new Episode: server sets id, version, requiredRegions; DTO gives title, mediaFile
+  const episode:Episode = {
+    id:crypto.randomUUID(),
+    version:1,
+    title: createEpisodeDto.title,
+    mediaFile: createEpisodeDto.mediaFile,
+    requiredRegions:[]
   }
+  // 2. add it to this.episodes
+  this.episodes.push(episode);
+  // 3. return it
+  return episode;
+
+  
+
+
+  console.log("create got:", createEpisodeDto.title);
+}
 
   findAll() {
     return this.episodes;
