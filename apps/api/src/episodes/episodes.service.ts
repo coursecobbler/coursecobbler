@@ -47,6 +47,21 @@ export class EpisodesService {
   }
 
   update(id: string, updateEpisodeDto: UpdateEpisodeDto) {
+    // 1. find the position of the episode with this id
+    const episodeIndex = this.episodes.findIndex(episode => episode.id === id);
+    if(episodeIndex === -1){
+       // 2. not found → throw a 404
+      throw new NotFoundException('No such episode exists, cannot update.');
+    }
+    const merge = {...this.episodes[episodeIndex], ...updateEpisodeDto};
+    return merge;
+
+ 
+   
+    // 3. merge: the existing episode, with the changes on top
+    // 4. put the merged episode back at that position
+    // 5. return it
+
     return `This action updates a #${id} episode`;
   }
 
