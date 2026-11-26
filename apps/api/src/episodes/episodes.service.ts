@@ -53,16 +53,13 @@ export class EpisodesService {
        // 2. not found → throw a 404
       throw new NotFoundException('No such episode exists, cannot update.');
     }
-    const merge = {...this.episodes[episodeIndex], ...updateEpisodeDto};
+      // 3. merge: the existing episode, with the changes on top
+      const merge = {...this.episodes[episodeIndex], ...updateEpisodeDto};
+      // 4. put the merged episode back at that position
+      this.episodes.splice(episodeIndex,1,merge);
+    
+     // 5. return it
     return merge;
-
- 
-   
-    // 3. merge: the existing episode, with the changes on top
-    // 4. put the merged episode back at that position
-    // 5. return it
-
-    return `This action updates a #${id} episode`;
   }
 
   remove(id: string) {
